@@ -129,9 +129,10 @@ module CMD
         else
           CMD::Mover.move_entities(parameter)
         end
+        #Sketchup.active_model.pages.add
       end
 
-    end
+    end # class FrameChangeObserver
 
     def self.observe_frame_changes
       @cmd_mover_obs ||= FrameChangeObserver.new
