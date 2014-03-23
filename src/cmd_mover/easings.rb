@@ -1,3 +1,4 @@
+
 module CMD::Mover::Easings
 
   #def self.pos_from_array(ary, t)
@@ -86,7 +87,7 @@ module CMD::Mover::Easings
     return c*(t/=d)*t*((s+1)*t - s) + b
   end
 
-  def self.back_both(t, b, c, d, s=1.70158)
+  def self.back_in_out(t, b, c, d, s=1.70158)
     if ((t /= d/2 ) < 1) 
       return c/2.0*(t*t*(((s*=(1.525))+1)*t - s)) + b
     end
@@ -94,11 +95,23 @@ module CMD::Mover::Easings
   end
 
 
-  def self.bounceOut(t, b, c, d) 
+  def self.bounce_out(t, b, c, d) 
     return c*(7.5625*t*t) + b if ((t/=d) < (1/2.75))  
     return c*(7.5625*(t-=(1.5/2.75))*t + 0.75) + b if (t < (2/2.75))
     return c*(7.5625*(t-=(2.25/2.75))*t + 0.9375) + b if (t < (2.5/2.75))
     return c*(7.5625*(t-=(2.625/2.75))*t + 0.984375) + b
+  end
+
+  def self.bounce_in(t, b, c, d)
+    c - bounce_out(d-t, 0, c, d) + b
+  end
+
+  def self.bounce_in_out(t, b, c, d)
+    if t < d/2
+      bounce_in(t*2, 0, c, d) * 0.5 + b
+    else
+      bounce_out(t*2-d, 0, c, d) * 0.5 + c*0.5 + b
+    end
   end
 
   def self.elastic_in_out(t, b, c, d, a = nil,  p=nil)
