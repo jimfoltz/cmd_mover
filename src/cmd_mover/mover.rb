@@ -73,6 +73,7 @@ module CMD
       for ent in ents do
         move_data.push [ent.entity_name(true), ent.transformation.to_a, e]
       end
+
       page.set_attribute(DICT_KEY, "entities_to_move", move_data)
 
       true
