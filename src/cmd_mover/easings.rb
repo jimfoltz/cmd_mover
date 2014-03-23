@@ -79,6 +79,17 @@ module CMD::Mover::Easings
     return c/2.0 * (-(2 ** (-10 * (t-=1))) + 2) + b
   end
 
+
+  def self.sine_in(t, b, c, d)
+    return -c * Math.cos(t/d * (Math::PI/2)) + c + b
+  end
+  def self.sine_out(t, b, c, d)
+    return c * Math.sin(t/d * (Math::PI/2)) + b
+  end
+  def self.sine_in_out(t, b, c, d)
+    return -c/2 * (Math.cos(Math::PI*t/d) - 1) + b
+  end
+
   def self.back_out(t, b, c,d, s=1.70158)
     return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b
   end
