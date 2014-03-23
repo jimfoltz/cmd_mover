@@ -1,4 +1,3 @@
-
 function cbclick(o) {
   var val = o.checked.toString();
   var b = document.getElementById('btn1');
@@ -11,13 +10,4 @@ function toggle() {
 
 function save_btn() {
   window.location = "skp:remember_positions";
-}
-
-function next_prev(w) {
-  var url = "skp:next_prev@" + w;
-  window.location = url;
-}
-
-function add_scene() {
-  window.location = "skp:add_scene";
 }
