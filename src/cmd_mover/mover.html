@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="./style.css">
+<script src="./dialog.js"></script>
+</head>
+
+<body>
+
+<div>
+  <div class="header">Workflow</div>
+  <ol>
+    <li>Add or select a Scene.
+    <li>Move objects into postion.
+    <li>Select objects, click "Save Position"
+    <li>Select next Scene, repeat from step 2.
+  </div>
+
+  <!--
+<fieldset>
+  <legend>Step 2</legend>
+  <ol>
+    <li>Enable Animation: <input id="cb1" type="checkbox" onclick="cbclick(this);">
+    <li>Select Scenes to view the animation.
+    <br/><br/>
+    <input type="button" value="Prev" onclick="next_prev('prev');">
+    <input type="button" value="Next" onclick="next_prev('next');">
+  </ol>
+</fieldset>
+-->
+  <div>
+    <table>
+      <tbody<
+      <tr>
+        <td> Easing</td>
+        <td>
+          <select id="easing">
+            <option value="linear">linear</option>
+            <option value="back_both">back_both</option>
+            <option value="back_in">back_in</option>
+            <option value="back_out">back_out</option>
+            <option value="bounceOut">bounceOut</option>
+            <option value="cubic_in">cubic_in</option>
+            <option value="cubic_in_out">cubic_in_out</option>
+            <option value="cubic_out">cubic_out</option>
+            <option value="elastic_in_out">elastic_in_out</option>
+            <option value="expo_in">expo_in</option>
+            <option value="expo_in_out">expo_in_out</option>
+            <option value="expo_out">expo_out</option>
+            <option value="quad_in">quad_in</option>
+            <option value="quad_in_out">quad_in_out</option>
+            <option value="quad_out">quad_out</option>
+            <option value="quart_in">quart_in</option>
+            <option value="quart_in_out">quart_in_out</option>
+            <option value="quart_out">quart_out</option>
+            <option value="quint_in">quint_in</option>
+            <option value="quint_in_out">quint_in_out</option>
+            <option value="quint_out">quint_out</option>
+          </select>
+        </td>
+        </tr>
+        <tr>
+          <td> Transision time (s)</td>
+          <td> <input type=text size=5 id="tt" value=1></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td> <input id="btn1" type="button" onclick="save_btn();" value="Save Position"> </td>
+        </tr>
+      </table>
+        <input id="cb1" type="checkbox" onclick="cbclick(this);">
+        <label for="cb1">Enable Animation:</label>
+
+        </body>
+        </html>

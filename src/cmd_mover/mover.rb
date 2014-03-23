@@ -1,13 +1,14 @@
 # This file defines some methods that let you move entities during page transitions
 
-require 'sketchup.rb'
-require 'mover_extensions/mover_names.rb'
-require 'mover_extensions/easings.rb'
-
-#=============================================================================
-
 module CMD
   module Mover
+
+    load File.join(PLUGIN_ROOT, 'mover_names.rb')
+    load File.join(PLUGIN_ROOT, 'easings.rb')
+
+    DICT_KEY = "CMD::Mover#{VERSION}".freeze
+
+    #=============================================================================
 
     def self.group_or_component?(ent)
       ent.kind_of? Sketchup::Group or ent.kind_of? Sketchup::ComponentInstance
@@ -19,7 +20,7 @@ module CMD
       $moving_entities_map = {}
 
       # Get a list of names of all entities that will move for the page
-      move_data = page.get_attribute "skp", "entities_to_move"
+      move_data = page.get_attribute(DICT_KEY, "entities_to_move")
       return if not move_data.kind_of? Array
 
       # look up each entity in the list and get its current and desired transform
@@ -68,12 +69,11 @@ module CMD
       return false if ents.empty?
       e = @dlg.get_element_value('easing')
 
-      move_data = page.get_attribute "skp", "entities_to_move", []
+      move_data = page.get_attribute(DICT_KEY, "entities_to_move", [])
       for ent in ents do
         move_data.push [ent.entity_name(true), ent.transformation.to_a, e]
       end
-      page.set_attribute "skp", "entities_to_move", move_data
-      p ents
+      page.set_attribute(DICT_KEY, "entities_to_move", move_data)
 
       true
     end
@@ -102,12 +102,11 @@ module CMD
         # Just show the information
         #s1 = fromPage ? fromPage.name : "NULL"
         #s2 = toPage ? toPage.name : "NULL"
-        #puts "#{s1} to #{s2} at #{parameter}"
 
         if( parameter < 1.0e-3 )
-          CMD_Mover.get_entities_to_move(toPage)
+          CMD::Mover.get_entities_to_move(toPage)
         else
-          CMD_Mover::move_entities parameter
+          CMD::Mover.move_entities(parameter)
         end
       end
 
@@ -116,13 +115,11 @@ module CMD
     def self.observe_frame_changes
       @cmd_mover_obs ||= FrameChangeObserver.new
       if @id
-        puts "removing"
         Sketchup::Pages.remove_frame_change_observer @id
         @id = nil
         #set_checkbox_checked('cb1', false)
         execute_on('cb1', 'checked=false')
       else
-        puts "adding"
         @id = Sketchup::Pages.add_frame_change_observer @cmd_mover_obs
         #set_checkbox_checked('cb1', true)
         execute_on('cb1', 'checked=true')
@@ -149,7 +146,6 @@ module CMD
     def self.remember_position_of_selection
       save_selected_entity_positions
       tt = @dlg.get_element_value('tt')
-      p tt
       Sketchup.active_model.pages.selected_page.transition_time = tt.to_f
       #observe_frame_changes
     end
@@ -161,7 +157,7 @@ module CMD
       ss = Sketchup.active_model.selection
       ss.clear
 
-      move_data = page.get_attribute "skp", "entities_to_move"
+      move_data = page.get_attribute(DICT_KEY, "entities_to_move")
       return if not move_data.kind_of? Array
 
       model = page.model
@@ -183,18 +179,15 @@ module CMD
 
     def self.create_dialog
       @dlg = UI::WebDialog.new("CMD's Mover", false, "CMD Mover")
-      html = Sketchup.find_support_file('mover.html', 'Plugins')
-      html = File.dirname(__FILE__) << '/mover.html'
+      html = File.join(PLUGIN_ROOT, 'mover.html')
       @dlg.set_file(html)
       @dlg.add_action_callback("toggle_observer") do |d, a|
-        puts "toggle_observer:#{a.inspect}"
-        CMD_Mover.observe_frame_changes
+        observe_frame_changes
         e = d.get_element_value('easing')
         @easing = e
       end
       @dlg.add_action_callback("remember_positions") do |d, a|
-        puts "remember_positions:#{a.inspect}"
-        CMD_Mover.remember_position_of_selection
+        remember_position_of_selection
       end
       @dlg.add_action_callback("next_prev") do |d, a|
         e = d.get_element_value('easing')
@@ -222,9 +215,6 @@ module CMD
       plugins_menu.add_item("Mover Dialog") { create_dialog } 
       file_loaded("mover.rb")
     end
-
-
-
 
   end # module Mover
 end # module CMD

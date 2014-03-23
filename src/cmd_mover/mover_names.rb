@@ -5,10 +5,10 @@ class Sketchup::Entity
 
 # This method gets the name of an Entity.  Returns nil if it is not named.
 def entity_name(create_if_needed = false)
-    aname = self.get_attribute("skp", "name")
+    aname = self.get_attribute(CMD::Mover::DICT_KEY, "name")
     if( not aname and create_if_needed )
         aname = self.entityID.to_s
-        self.set_attribute("skp", "name", aname)
+        self.set_attribute(CMD::Mover::DICT_KEY, "name", aname)
     end
     aname
 end
@@ -16,9 +16,9 @@ end
 # This method names the Entity
 def entity_name=(aname)
     if( aname )
-        self.set_attribute("skp", "name", aname)
+        self.set_attribute(CMD::Mover::DICT_KEY, "name", aname)
     else
-        self.delete_attribute("skp", "name")
+        self.delete_attribute(CMD::Mover::DICT_KEY, "name")
     end
     aname
 end
