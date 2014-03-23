@@ -17,7 +17,7 @@ module CMD
     def self.get_entities_to_move(page)
       model = page.model
       entities = model.entities
-      $moving_entities_map = {}
+      @moving_entities_map = {}
 
       # Get a list of names of all entities that will move for the page
       move_data = page.get_attribute(DICT_KEY, "entities_to_move")
@@ -38,17 +38,17 @@ module CMD
         tfrom = ent.transformation.to_a
         tto = a[1]
         e = a[2]
-        $moving_entities_map[name] = [ent, tfrom, tto, e]
+        @moving_entities_map[name] = [ent, tfrom, tto, e]
       end
 
-      $moving_entities_map
+      @moving_entities_map
     end
 
     def self.move_entities(parameter)
-      return 0 if $moving_entities_map.empty?
+      return 0 if @moving_entities_map.empty?
 
       # move each entity to its new position
-      $moving_entities_map.each_value do |a|
+      @moving_entities_map.each_value do |a|
         ent = a[0]
         t1 = a[1]
         t2 = a[2]
