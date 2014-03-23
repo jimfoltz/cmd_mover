@@ -4,11 +4,16 @@ require 'extensions'
 module CMD
   module Mover
 
-    VERSION = "0.6.0".freeze
+    VERSION     = "0.6.0".freeze
     PLUGIN_ROOT = File.join(File.dirname(__FILE__), "cmd_mover")
 
     ext = SketchupExtension.new("Mover", File.join(PLUGIN_ROOT, "mover.rb"))
-    ext.version = VERSION
+
+    ext.version     = VERSION
+    ext.copyright   = ''
+    ext.creator     = ''
+    ext.description = ''
+
     Sketchup.register_extension(ext, true)
 
   end # module Mover
