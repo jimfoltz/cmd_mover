@@ -3,7 +3,7 @@
 module CMD
   module Mover
 
-    load File.join(PLUGIN_ROOT, 'mover_names.rb')
+    #load File.join(PLUGIN_ROOT, 'mover_names.rb')
     load File.join(PLUGIN_ROOT, 'easings.rb')
 
     DICT_KEY = "CMD::Mover".freeze
@@ -31,7 +31,8 @@ module CMD
       # with the current and wanted transforms as the value
       for a in move_data do
         name = a[0]
-        ent = entities[name]
+        #ent = entities[name]
+        ent = entities.detect{|e| e.get_attribute(DICT_KEY, 'name') == name}
         next if not ent
         next if not group_or_component?(ent)
         next unless ent.valid?
@@ -59,6 +60,13 @@ module CMD
       end
     end
 
+    def self.set_entity_name(entity, create_if_needed = false)
+      aname = entity.entityID.to_s
+      entity.set_attribute(CMD::Mover::DICT_KEY, "name", aname)
+      aname
+    end
+
+
     # Save the current position of all selected groups and component instances
     # for the selected page
     def self.save_selected_entity_positions
@@ -74,7 +82,7 @@ module CMD
 
       # Update 
       for ent in ents do
-        name = ent.entity_name(true)
+        name = set_entity_name(ent, true)
         record = move_data.detect{|e| e[0] == name}
         if record
           record[1] =  ent.transformation.to_a
@@ -177,7 +185,8 @@ module CMD
 
       for a in move_data do
         name = a[0]
-        ent = entities[name]
+        #ent = entities[name]
+        ent = entities.detect{|e| e.get_attribute(DICT_KEY, 'name') == name}
         next if not ent
         next if not group_or_component?(ent)
 
