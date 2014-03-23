@@ -6,7 +6,7 @@ module CMD
     load File.join(PLUGIN_ROOT, 'mover_names.rb')
     load File.join(PLUGIN_ROOT, 'easings.rb')
 
-    DICT_KEY = "CMD::Mover#{VERSION}".freeze
+    DICT_KEY = "CMD::Mover".freeze
 
     #=============================================================================
 
