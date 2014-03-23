@@ -62,16 +62,27 @@ module CMD
     # Save the current position of all selected groups and component instances
     # for the selected page
     def self.save_selected_entity_positions
-      ss = Sketchup.active_model.selection
+      ss   = Sketchup.active_model.selection
       page = Sketchup.active_model.pages.selected_page
       return false if not page
       ents = ss.find_all {|e| e.kind_of?(Sketchup::Group) or e.kind_of?(Sketchup::ComponentInstance)}
       return false if ents.empty?
       e = @dlg.get_element_value('easing')
+      tt = @dlg.get_element_value('tt')
 
       move_data = page.get_attribute(DICT_KEY, "entities_to_move", [])
+
+      # Update 
       for ent in ents do
-        move_data.push [ent.entity_name(true), ent.transformation.to_a, e]
+        name = ent.entity_name(true)
+        record = move_data.detect{|e| e[0] == name}
+        if record
+          record[1] =  ent.transformation.to_a
+          record[2] = e
+          record[3] = tt
+        else
+          move_data.push( [name, ent.transformation.to_a, e, tt] )
+        end
       end
 
       page.set_attribute(DICT_KEY, "entities_to_move", move_data)
@@ -201,6 +212,10 @@ module CMD
       end
       @dlg.add_action_callback("add_scene") do |d, a|
         Sketchup.active_model.pages.add
+      end
+
+      @dlg.add_action_callback('view_anim_settings') do |d, a|
+        UI.show_model_info("Animation")
       end
       @dlg.show
     end
