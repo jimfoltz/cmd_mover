@@ -8,9 +8,22 @@ module CMD
 
     class PagesObserver < Sketchup::PagesObserver
       def onContentsModified(pages)
-        puts "onContentsModified:#{pages.inspect}"
+        UI.start_timer(0, false) {
+        CMD::Mover.update_dialog()
+        }
       end
     end
+    
+    def self.attach_observers
+      puts "attaching observers"
+      @pages_observer ||= PagesObserver.new
+      Sketchup.active_model.pages.add_observer(@pages_observer)
+    end
+    def self.remove_observers
+      puts "removing observers"
+      Sketchup.active_model.pages.remove_observer(@pages_observer)
+    end
+
 
     def self.group_or_component?(ent)
       ent.kind_of?(Sketchup::Group) or ent.kind_of?(Sketchup::ComponentInstance)
