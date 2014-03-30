@@ -5,6 +5,7 @@ module CMD
 
     #load File.join(PLUGIN_ROOT, 'mover_names.rb')
     load File.join(PLUGIN_ROOT, 'easings.rb')
+    load File.join(PLUGIN_ROOT, 'dialog.rb')
 
     DICT_KEY = "CMD::Mover".freeze
     REG_KEY  = 'CMD\Mover'.freeze
@@ -199,43 +200,6 @@ module CMD
     end
     # TODO: I'd like to only enable this when it is really needed
     #observe_frame_changes
-
-    def self.create_dialog
-      @dlg = UI::WebDialog.new("CMD's Mover", false, REG_KEY, 280, 300)
-      html = File.join(PLUGIN_ROOT, 'mover.html')
-      @dlg.set_file(html)
-
-      @dlg.add_action_callback("toggle_observer") do |d, a|
-        observe_frame_changes
-        e = d.get_element_value('easing')
-        @easing = e
-      end
-
-      @dlg.add_action_callback("remember_positions") do |d, a|
-        remember_position_of_selection
-      end
-
-      @dlg.add_action_callback("next_prev") do |d, a|
-        e = d.get_element_value('easing')
-        @easing = e
-        if a == "next"
-          Sketchup.send_action "pageNext:"
-        else
-          Sketchup.send_action "pagePrevious:"
-        end
-      end
-
-      @dlg.add_action_callback("add_scene") do |d, a|
-        Sketchup.active_model.pages.add
-      end
-
-      @dlg.add_action_callback('view_anim_settings') do |d, a|
-        UI.show_model_info("Animation")
-      end
-
-      @dlg.show
-
-    end # create_dialog
 
     #-----------------------------------------------------------------------------
     # Add a new menu item to the Plugins menu
