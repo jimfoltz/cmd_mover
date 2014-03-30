@@ -77,13 +77,18 @@ module CMD
     # Save the current position of all selected groups and component instances
     # for the selected page
     def self.save_selected_entity_positions
-      ss   = Sketchup.active_model.selection
-      page = Sketchup.active_model.pages.selected_page
+      ss     = Sketchup.active_model.selection
+      pages  = Sketchup.active_model.pages
+      page   = pages.selected_page
+      easing = @dlg.get_element_value('easing')
+      tt     = @dlg.get_element_value('tt')
+
       return false if not page
+
       ents = ss.find_all {|e| e.kind_of?(Sketchup::Group) or e.kind_of?(Sketchup::ComponentInstance)}
       return false if ents.empty?
-      e = @dlg.get_element_value('easing')
-      tt = @dlg.get_element_value('tt')
+
+      pages.selected_page.transition_time = tt.to_f
 
       move_data = page.get_attribute(DICT_KEY, "entities_to_move", [])
 
@@ -93,10 +98,9 @@ module CMD
         record = move_data.detect{|e| e[0] == name}
         if record
           record[1] =  ent.transformation.to_a
-          record[2] = e
-          record[3] = tt
+          record[2] = easing
         else
-          move_data.push( [name, ent.transformation.to_a, e, tt] )
+          move_data.push( [name, ent.transformation.to_a, easing] )
         end
       end
 
@@ -160,15 +164,6 @@ module CMD
       end
     end
 
-    def self.remember_position_of_selection
-      pages = Sketchup.active_model.pages
-      if pages.length > 0
-        save_selected_entity_positions()
-        tt = @dlg.get_element_value('tt')
-        pages.selected_page.transition_time = tt.to_f
-      end
-    end
-
     def self.show_selection
       page = Sketchup.active_model.pages.selected_page
       return false if not page
@@ -200,11 +195,7 @@ module CMD
     #-----------------------------------------------------------------------------
     # Add a new menu item to the Plugins menu
     if( not file_loaded?("mover.rb") )
-      add_separator_to_menu("Plugins")
       plugins_menu = UI.menu("Plugins")
-      #cmdId = plugins_menu.add_item("Remember Position of Selection") { remember_position_of_selection }
-      #plugins_menu.set_validation_proc(cmdId) { validate_save_position }
-      #plugins_menu.add_item("Show Location of Preserved Selection") { show_selection } 
       plugins_menu.add_item("Mover Dialog") { create_dialog } 
       file_loaded("mover.rb")
     end

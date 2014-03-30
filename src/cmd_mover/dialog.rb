@@ -15,7 +15,7 @@ module CMD::Mover
     end
 
     @dlg.add_action_callback("remember_positions") do |d, a|
-      remember_position_of_selection
+      save_selected_entity_positions()
     end
 
     @dlg.add_action_callback("next_prev") do |d, a|
