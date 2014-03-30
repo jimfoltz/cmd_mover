@@ -164,10 +164,12 @@ module CMD
     end
 
     def self.remember_position_of_selection
-      save_selected_entity_positions
-      tt = @dlg.get_element_value('tt')
-      Sketchup.active_model.pages.selected_page.transition_time = tt.to_f
-      #observe_frame_changes
+      pages = Sketchup.active_model.pages
+      if pages.length > 0
+        save_selected_entity_positions()
+        tt = @dlg.get_element_value('tt')
+        pages.selected_page.transition_time = tt.to_f
+      end
     end
 
     def self.show_selection
