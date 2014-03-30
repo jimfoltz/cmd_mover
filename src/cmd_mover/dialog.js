@@ -1,6 +1,5 @@
 function cbclick(o) {
   var val = o.checked.toString();
-  var b = document.getElementById('btn1');
   window.location = "skp:toggle_observer@" + val;
 }
 
