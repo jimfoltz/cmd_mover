@@ -144,21 +144,14 @@ module CMD
       if @id
         Sketchup::Pages.remove_frame_change_observer @id
         @id = nil
-        #set_checkbox_checked('cb1', false)
-        execute_on('cb1', 'checked=false')
+        set_checkbox_checked('cb1', false)
       else
         @id = Sketchup::Pages.add_frame_change_observer @cmd_mover_obs
-        #set_checkbox_checked('cb1', true)
-        execute_on('cb1', 'checked=true')
+        set_checkbox_checked('cb1', true)
         pages = Sketchup.active_model.pages
         cpage = pages.selected_page
         pages.selected_page = cpage
       end
-    end
-
-    def self.execute_on(id, script)
-      cmd = "document.getElementById('#{id}').#{script}"
-      @dlg.execute_script(cmd)
     end
 
     def self.set_checkbox_checked(cb, st)

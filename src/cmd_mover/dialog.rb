@@ -9,7 +9,7 @@ module CMD::Mover
     @dlg.set_file(html)
 
     @dlg.add_action_callback("toggle_observer") do |d, a|
-      observe_frame_changes
+      observe_frame_changes()
       e = d.get_element_value('easing')
       @easing = e
     end
