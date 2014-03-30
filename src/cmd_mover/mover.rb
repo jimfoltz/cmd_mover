@@ -3,9 +3,8 @@
 module CMD
   module Mover
 
-    #load File.join(PLUGIN_ROOT, 'mover_names.rb')
-    load File.join(PLUGIN_ROOT, 'easings.rb')
     load File.join(PLUGIN_ROOT, 'dialog.rb')
+    load File.join(PLUGIN_ROOT, 'easings.rb')
 
     DICT_KEY = "CMD::Mover".freeze
     REG_KEY  = 'CMD\Mover'.freeze
@@ -39,9 +38,9 @@ module CMD
         next if not group_or_component?(ent)
         next unless ent.valid?
         tfrom = ent.transformation.to_a
-        tto = a[1]
-        e = a[2]
-        @moving_entities_map[name] = [ent, tfrom, tto, e]
+        tto   = a[1]
+        easing     = a[2]
+        @moving_entities_map[name] = [ent, tfrom, tto, easing]
       end
 
       @moving_entities_map
