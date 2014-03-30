@@ -135,6 +135,11 @@ module CMD
     end # class FrameChangeObserver
 
     def self.observe_frame_changes
+      pages = Sketchup.active_model.pages
+      if pages.length < 1
+        set_checkbox_checked('cb1', false)
+        return
+      end
       @cmd_mover_obs ||= FrameChangeObserver.new
       if @id
         Sketchup::Pages.remove_frame_change_observer @id
