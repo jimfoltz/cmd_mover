@@ -6,11 +6,6 @@ module CMD
     load File.join(PLUGIN_ROOT, 'dialog.rb')
     load File.join(PLUGIN_ROOT, 'easings.rb')
 
-    DICT_KEY = "CMD::Mover".freeze
-    REG_KEY  = 'CMD\Mover'.freeze
-
-    #=============================================================================
-
     class PagesObserver < Sketchup::PagesObserver
       def onContentsModified(pages)
         puts "onContentsModified:#{pages.inspect}"
@@ -18,7 +13,7 @@ module CMD
     end
 
     def self.group_or_component?(ent)
-      ent.kind_of? Sketchup::Group or ent.kind_of? Sketchup::ComponentInstance
+      ent.kind_of?(Sketchup::Group) or ent.kind_of?(Sketchup::ComponentInstance)
     end
 
     def self.get_entities_to_move(page)
@@ -77,18 +72,19 @@ module CMD
     # Save the current position of all selected groups and component instances
     # for the selected page
     def self.save_selected_entity_positions
-      ss     = Sketchup.active_model.selection
-      pages  = Sketchup.active_model.pages
-      page   = pages.selected_page
-      easing = @dlg.get_element_value('easing')
-      tt     = @dlg.get_element_value('tt')
+
+      ss              = Sketchup.active_model.selection
+      pages           = Sketchup.active_model.pages
+      page            = pages.selected_page
+      easing          = @dlg.get_element_value('easing')
+      transition_time = @dlg.get_element_value('transition_time')
 
       return false if not page
 
-      ents = ss.find_all {|e| e.kind_of?(Sketchup::Group) or e.kind_of?(Sketchup::ComponentInstance)}
+      ents = ss.find_all {|e| group_or_component?(e)}
       return false if ents.empty?
 
-      pages.selected_page.transition_time = tt.to_f
+      pages.selected_page.transition_time = transition_time.to_f
 
       move_data = page.get_attribute(DICT_KEY, "entities_to_move", [])
 
@@ -139,7 +135,6 @@ module CMD
         else
           CMD::Mover.move_entities(parameter)
         end
-        #Sketchup.active_model.pages.add
       end
 
     end # class FrameChangeObserver
@@ -152,11 +147,11 @@ module CMD
       end
       @cmd_mover_obs ||= FrameChangeObserver.new
       if @id
-        Sketchup::Pages.remove_frame_change_observer @id
+        Sketchup::Pages.remove_frame_change_observer(@id)
         @id = nil
         set_checkbox_checked('cb1', false)
       else
-        @id = Sketchup::Pages.add_frame_change_observer @cmd_mover_obs
+        @id = Sketchup::Pages.add_frame_change_observer(@cmd_mover_obs)
         set_checkbox_checked('cb1', true)
         pages = Sketchup.active_model.pages
         cpage = pages.selected_page

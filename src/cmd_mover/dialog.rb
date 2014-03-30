@@ -18,20 +18,6 @@ module CMD::Mover
       save_selected_entity_positions()
     end
 
-    @dlg.add_action_callback("next_prev") do |d, a|
-      e = d.get_element_value('easing')
-      @easing = e
-      if a == "next"
-        Sketchup.send_action "pageNext:"
-      else
-        Sketchup.send_action "pagePrevious:"
-      end
-    end
-
-    @dlg.add_action_callback("add_scene") do |d, a|
-      Sketchup.active_model.pages.add
-    end
-
     @dlg.add_action_callback('view_anim_settings') do |d, a|
       UI.show_model_info("Animation")
     end
@@ -39,6 +25,7 @@ module CMD::Mover
     @dlg.add_action_callback('play_anim') do |d, a|
       puts "play_anim:#{a.inspect}"
     end
+
     @dlg.add_action_callback('stop_anim') do |d, a|
       puts "stop_anim:#{a.inspect}"
     end
@@ -51,8 +38,37 @@ module CMD::Mover
       end
       @dlg.execute_script cmd
     end
-    @dlg.show
+
+    def self.update_dialog
+      pages = Sketchup.active_model.pages
+
+      transition_time = pages.selected_page.transition_time
+      scr = %Q(transition_time.value='#{transition_time}';)
+      @dlg.execute_script(scr)
+
+    end
+
+    #@dlg.add_action_callback("next_prev") do |d, a|
+    #  e = d.get_element_value('easing')
+    #  @easing = e
+    #  if a == "next"
+    #    Sketchup.send_action "pageNext:"
+    #  else
+    #    Sketchup.send_action "pagePrevious:"
+    #  end
+    #end
+
+    #@dlg.add_action_callback("add_scene") do |d, a|
+    #  Sketchup.active_model.pages.add
+    #end
+
+    @dlg.set_on_close {
+      remove_observers()
+    }
+    @dlg.show {
+      attach_observers()
+    }
 
   end # create_dialog
-
 end
+
