@@ -43,6 +43,14 @@ module CMD::Mover
       puts "stop_anim:#{a.inspect}"
     end
 
+    def self.set_checkbox_checked(cb, st)
+      if st == true
+        cmd = "document.getElementById('#{cb}').checked = true;"
+      else
+        cmd = "document.getElementById('#{cb}').checked = false;"
+      end
+      @dlg.execute_script cmd
+    end
     @dlg.show
 
   end # create_dialog

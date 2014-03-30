@@ -11,6 +11,12 @@ module CMD
 
     #=============================================================================
 
+    class PagesObserver < Sketchup::PagesObserver
+      def onContentsModified(pages)
+        puts "onContentsModified:#{pages.inspect}"
+      end
+    end
+
     def self.group_or_component?(ent)
       ent.kind_of? Sketchup::Group or ent.kind_of? Sketchup::ComponentInstance
     end
@@ -152,15 +158,6 @@ module CMD
         cpage = pages.selected_page
         pages.selected_page = cpage
       end
-    end
-
-    def self.set_checkbox_checked(cb, st)
-      if st == true
-        cmd = "document.getElementById('#{cb}').checked = true;"
-      else
-        cmd = "document.getElementById('#{cb}').checked = false;"
-      end
-      @dlg.execute_script cmd
     end
 
     def self.remember_position_of_selection
