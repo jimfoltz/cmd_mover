@@ -14,7 +14,7 @@ module CMD::Mover
       @easing = e
     end
 
-    @dlg.add_action_callback("remember_positions") do |d, a|
+    @dlg.add_action_callback("save_positions") do |d, a|
       save_selected_entity_positions()
     end
 

@@ -8,5 +8,5 @@ function toggle() {
 }
 
 function save_btn() {
-  window.location = "skp:remember_positions";
+  window.location = "skp:save_positions";
 }
